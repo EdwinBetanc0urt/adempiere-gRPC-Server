@@ -81,7 +81,7 @@ jobs:
 
       - run: ls -d */
       - run: ls * -s
-
+      - run: ls adempiere-gRPC-Server.zip -s
       - name: Upload zip
         uses: skx/github-action-publish-binaries@master
         env:
