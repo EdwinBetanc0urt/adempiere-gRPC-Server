@@ -48,11 +48,17 @@ jobs:
           name: adempiere-gRPC-Server-artifact
           path: build/release/
 
-      - name: Upload dist app artifact
+      - name: Upload dist app zip artifact
         uses: actions/upload-artifact@v2
         with:
-          # name: adempiere-gRPC-Server.zip
+          name: adempiere-gRPC-Server.zip
           path: build/release/adempiere-gRPC-Server.zip
+
+      - name: Upload dist app tar.MD5 artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: adempiere-gRPC-Server.tar.MD5
+          path: build/release/adempiere-gRPC-Server.tar.MD5
 
   publish-dist:
     name: Upload ADempiere-gRPC-Server binaries
@@ -113,7 +119,7 @@ jobs:
       - name: Download build dist app
         uses: actions/download-artifact@v2
         with:
-          name: adempiere-gRPC-Server-artifact
+          name: adempiere-gRPC-Server.zip
           path: dist
 
       - name: Unzip dist file
