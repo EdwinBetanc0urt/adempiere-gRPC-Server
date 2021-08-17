@@ -79,11 +79,10 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v2
 
-      - run: ls -d dist/*
-      - run: ls -s dist/
-      - run: |
-          cd dist
-          ls * -s
+      - run: ls -d *
+      - run: ls -s *
+      - run: ls -s adempiere-gRPC-Server.zip/
+
       - name: Upload zip
         uses: skx/github-action-publish-binaries@master
         env:
