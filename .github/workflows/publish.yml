@@ -79,7 +79,8 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v2
 
-      - run: ls -h
+      - run: ls -d */
+      - run: ls * -s
 
       - name: Upload zip
         uses: skx/github-action-publish-binaries@master
