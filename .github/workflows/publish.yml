@@ -88,28 +88,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: 'dist/*.zip'
+          args: 'dist/adempiere-gRPC-Server.zip'
 
       - name: Upload zip.MD5
         uses: skx/github-action-publish-binaries@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: 'dist/*.zip.MD5'
+          args: 'dist/adempiere-gRPC-Server.zip.MD5'
 
       - name: Upload tar
         uses: skx/github-action-publish-binaries@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: 'dist/*.tar'
+          args: 'dist/adempiere-gRPC-Server.tar'
 
       - name: Upload tar.MD5
         uses: skx/github-action-publish-binaries@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: 'dist/*.tar.MD5'
+          args: 'dist/adempiere-gRPC-Server.tar.MD5'
 
 
   # Publish docker image in Github Container Registry to application
@@ -132,7 +132,7 @@ jobs:
       - name: Unzip dist file
         run: |
           cd dist
-          unzip -o dist/adempiere-gRPC-Server.zip
+          unzip -o adempiere-gRPC-Server.zip
 
       - run: ls dist
 
