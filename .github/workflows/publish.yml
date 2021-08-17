@@ -20,9 +20,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
-          java-version: 1.8
+          distribution: 'adopt-hotspot'
+          java-version: 8
 
       - name: get adempiere source
         run: |
@@ -66,6 +67,7 @@ jobs:
           name: adempiere-gRPC-Server.tar.MD5
           path: build/release/adempiere-gRPC-Server.tar.MD5
 
+
   publish-dist:
     name: Upload ADempiere-gRPC-Server binaries
     needs: build-app
@@ -74,8 +76,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v2
-
       - name: Download build all artifacts
         uses: actions/download-artifact@v2
         with:
@@ -88,28 +88,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: 'dist/adempiere-gRPC-Server.zip'
-
-      - name: Upload zip.MD5
-        uses: skx/github-action-publish-binaries@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: 'dist/adempiere-gRPC-Server.zip.MD5'
-
-      - name: Upload tar
-        uses: skx/github-action-publish-binaries@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: 'dist/adempiere-gRPC-Server.tar'
-
-      - name: Upload tar.MD5
-        uses: skx/github-action-publish-binaries@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: 'dist/adempiere-gRPC-Server.tar.MD5'
+          args: dist/adempiere-gRPC-Server.*
 
 
   # Publish docker image in Github Container Registry to application
@@ -127,14 +106,12 @@ jobs:
           name: adempiere-gRPC-Server.zip
           path: dist
 
-      - run: ls dist
-
       - name: Unzip dist file
         run: |
           cd dist
           unzip -o adempiere-gRPC-Server.zip
 
-      - run: ls dist
+      - run: ls dist/adempiere-gRPC-Server
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
