@@ -78,16 +78,20 @@ jobs:
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v2
+        with:
+          path: dist
 
-      - run: ls -d */
-      - run: ls * -s
-      - run: ls adempiere-gRPC-Server.zip -s
+      - run: ls -d dist/*
+      - run: ls -s dist/
+      - run: |
+          cd dist
+          ls * -s
       - name: Upload zip
         uses: skx/github-action-publish-binaries@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          args: adempiere-gRPC-Server.zip
+          args: dist/adempiere-gRPC-Server.zip
 
 
   # Publish docker image in Github Container Registry to application
