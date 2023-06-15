@@ -667,15 +667,16 @@ public class WorkflowServiceImplementation extends WorkflowImplBase {
 	@Override
 	public void runDocumentAction(RunDocumentActionRequest request, StreamObserver<ProcessLog> responseObserver) {
 		try {
-			if(request == null) {
+			if (request == null) {
 				throw new AdempiereException("Object Request Null");
 			}
 
-			ProcessLog.Builder processReponse = runDocumentAction(Env.getCtx(), request);
+			ProcessLog.Builder processReponse = runDocumentAction(request);
 			responseObserver.onNext(processReponse.build());
 			responseObserver.onCompleted();
 		} catch (Exception e) {
 			log.severe(e.getLocalizedMessage());
+			e.printStackTrace();
 			responseObserver.onError(
 				Status.INTERNAL
 					.withDescription(e.getLocalizedMessage())
@@ -692,7 +693,7 @@ public class WorkflowServiceImplementation extends WorkflowImplBase {
 	 * @throws IOException 
 	 * @throws FileNotFoundException 
 	 */
-	private ProcessLog.Builder runDocumentAction(Properties context, RunDocumentActionRequest request) throws FileNotFoundException, IOException {
+	private ProcessLog.Builder runDocumentAction(RunDocumentActionRequest request) throws FileNotFoundException, IOException {
 		if (Util.isEmpty(request.getTableName(), true)) {
 			throw new AdempiereException("@AD_Table_ID@ @NotFound@");
 		}
@@ -703,6 +704,7 @@ public class WorkflowServiceImplementation extends WorkflowImplBase {
 		}
 		String documentAction = request.getDocumentAction();
 
+		Properties context = Env.getCtx();
 		MTable table = MTable.get(context, request.getTableName());
 		if (table == null || table.getAD_Table_ID() <= 0) {
 			throw new AdempiereException("@AD_Table_ID@ @NotFound@");
