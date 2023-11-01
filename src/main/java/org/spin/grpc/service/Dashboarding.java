@@ -1,5 +1,5 @@
 /************************************************************************************
- * Copyright (C) 2012-2023 E.R.P. Consultores y Asociados, C.A.                     *
+ * Copyright (C) 2012-present E.R.P. Consultores y Asociados, C.A.                  *
  * Contributor(s): Yamel Senih ysenih@erpya.com                                     *
  * This program is free software: you can redistribute it and/or modify             *
  * it under the terms of the GNU General Public License as published by             *
@@ -47,6 +47,7 @@ import org.compiere.model.MGoal;
 import org.compiere.model.MMeasure;
 import org.compiere.model.MMenu;
 import org.compiere.model.MRule;
+import org.compiere.model.MTable;
 import org.compiere.model.MWindow;
 import org.compiere.model.PO;
 import org.compiere.model.Query;
@@ -82,10 +83,10 @@ import org.spin.backend.grpc.dashboarding.WindowMetrics;
 import org.spin.base.db.LimitUtil;
 import org.spin.base.util.ContextManager;
 import org.spin.base.util.RecordUtil;
-import org.spin.base.util.SessionManager;
 import org.spin.dashboarding.DashboardingConvertUtil;
 import org.spin.eca50.controller.ChartBuilder;
 import org.spin.eca50.data.ChartValue;
+import org.spin.service.grpc.authentication.SessionManager;
 import org.spin.service.grpc.util.ValueManager;
 
 import com.google.protobuf.Value;
@@ -266,13 +267,16 @@ public class Dashboarding extends DashboardingImplBase {
 			} else if(documentStatus.getAD_Form_ID() != 0) {
 				pendingDocument.setFormId(documentStatus.getAD_Form_ID());
 			}
+
 			//	Criteria
-//			MTable table = MTable.get(context, documentStatus.getAD_Table_ID());
-			//	TODO: Add filter from SQL
-//			pendingDocument
-//					.setCriteria(Criteria.newBuilder()
-//					.setTableName(ValueManager.validateNull(table.getTableName()))
-//					.setWhereClause(ValueManager.validateNull(documentStatus.getWhereClause())));
+			//	TODO: Add filter from SQL documentStatus.getWhereClause()
+			MTable table = MTable.get(context, documentStatus.getAD_Table_ID());
+			pendingDocument.setTableName(
+				ValueManager.validateNull(
+					table.getTableName()
+				)
+			);
+
 			//	Set quantity
 			pendingDocument.setRecordCount(MDocumentStatus.evaluate(documentStatus));
 			//	TODO: Add description for interface
