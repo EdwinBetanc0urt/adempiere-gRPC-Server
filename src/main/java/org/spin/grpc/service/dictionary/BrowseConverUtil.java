@@ -184,7 +184,11 @@ public class BrowseConverUtil {
 			.setDisplayLogic(
 				ValueManager.validateNull(browseField.getDisplayLogic())
 			)
-			.setDisplayType(browseField.getAD_Reference_ID())
+			.setDisplayType(
+				DictionaryConvertUtil.convertDisplayType(
+					browseField.getAD_Reference_ID()
+				)
+			)
 			.setIsDisplayed(browseField.isDisplayed())
 			.setIsQueryCriteria(browseField.isQueryCriteria())
 			.setIsOrderBy(browseField.isOrderBy())
@@ -193,7 +197,9 @@ public class BrowseConverUtil {
 			.setIsRange(browseField.isRange())
 			.setIsReadOnly(browseField.isReadOnly())
 			.setReadOnlyLogic(
-				ValueManager.validateNull(browseField.getReadOnlyLogic())
+				ValueManager.validateNull(
+					browseField.getReadOnlyLogic()
+				)
 			)
 			.setIsKey(browseField.isKey())
 			.setIsIdentifier(browseField.isIdentifier())
@@ -262,7 +268,11 @@ public class BrowseConverUtil {
 				Reference.Builder referenceBuilder = DictionaryConvertUtil.convertReference(context, info);
 				builder.setReference(referenceBuilder.build());
 			} else {
-				builder.setDisplayType(DisplayType.String);
+				builder.setDisplayType(
+					DictionaryConvertUtil.convertDisplayType(
+						DisplayType.String
+					)
+				);
 			}
 		}
 

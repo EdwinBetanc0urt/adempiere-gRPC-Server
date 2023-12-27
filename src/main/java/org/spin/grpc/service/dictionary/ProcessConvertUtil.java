@@ -78,7 +78,7 @@ public class ProcessConvertUtil {
 			.setIsDirectPrint(process.isDirectPrint())
 			.setIsReport(process.isReport())
 			.setIsActive(process.isActive())
-			.setIsHaveParameres(
+			.setHaveParameres(
 				parametersList != null && parametersList.size() > 0
 			)
 		;
@@ -272,7 +272,11 @@ public class ProcessConvertUtil {
 			.setDisplayLogic(
 				ValueManager.validateNull(processParameter.getDisplayLogic())
 			)
-			.setDisplayType(processParameter.getAD_Reference_ID())
+			.setDisplayType(
+				DictionaryConvertUtil.convertDisplayType(
+					processParameter.getAD_Reference_ID()
+				)
+			)
 			.setIsDisplayed(true)
 			.setIsInfoOnly(processParameter.isInfoOnly())
 			.setIsMandatory(processParameter.isMandatory())

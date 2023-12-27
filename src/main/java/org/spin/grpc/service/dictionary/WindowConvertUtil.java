@@ -353,7 +353,11 @@ public class WindowConvertUtil {
 			.setDisplayLogic(
 				ValueManager.validateNull(field.getDisplayLogic())
 			)
-			.setDisplayType(displayTypeId)
+			.setDisplayType(
+				DictionaryConvertUtil.convertDisplayType(
+					displayTypeId
+				)
+			)
 			.setFormatPattern(
 				ValueManager.validateNull(column.getFormatPattern())
 			)
@@ -439,7 +443,11 @@ public class WindowConvertUtil {
 				Reference.Builder referenceBuilder = DictionaryConvertUtil.convertReference(context, info);
 				builder.setReference(referenceBuilder.build());
 			} else {
-				builder.setDisplayType(DisplayType.String);
+				builder.setDisplayType(
+					DictionaryConvertUtil.convertDisplayType(
+						DisplayType.String
+					)
+				);
 			}
 		} else if (DisplayType.Button == displayTypeId) {
 			if (column.getColumnName().equals("Record_ID")) {

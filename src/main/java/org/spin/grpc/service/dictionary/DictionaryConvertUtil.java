@@ -22,7 +22,9 @@ import java.util.Optional;
 import java.util.Properties;
 
 import org.adempiere.core.domains.models.I_AD_Message;
+import org.adempiere.core.domains.models.I_AD_Reference;
 import org.adempiere.core.domains.models.I_AD_Window;
+import org.adempiere.core.domains.models.X_AD_Reference;
 import org.compiere.model.MColumn;
 import org.compiere.model.MForm;
 import org.compiere.model.MLookupInfo;
@@ -51,6 +53,55 @@ import org.spin.service.grpc.util.value.ValueManager;
 import org.spin.util.ASPUtil;
 
 public class DictionaryConvertUtil {
+
+	public static org.spin.backend.grpc.dictionary.DisplayType.Builder convertDisplayType(int displayTypeId) {
+		org.spin.backend.grpc.dictionary.DisplayType.Builder builder = org.spin.backend.grpc.dictionary.DisplayType.newBuilder();
+		if (displayTypeId <= 0) {
+			return builder;
+		}
+		X_AD_Reference displayType = new X_AD_Reference(Env.getCtx(), displayTypeId, null);
+		return convertDisplayType(displayType);
+	}
+
+	public static org.spin.backend.grpc.dictionary.DisplayType.Builder convertDisplayType(X_AD_Reference displayType) {
+		org.spin.backend.grpc.dictionary.DisplayType.Builder builder = org.spin.backend.grpc.dictionary.DisplayType.newBuilder();
+		if(displayType == null || displayType.getAD_Reference_ID() <= 0) {
+			return builder;
+		}
+		builder.setId(
+				displayType.getAD_Reference_ID()
+			)
+			.setUuid(
+				ValueManager.validateNull(
+					displayType.getUUID()
+				)
+			)
+			.setName(
+				ValueManager.validateNull(
+					displayType.get_Translation(
+						I_AD_Reference.COLUMNNAME_Name
+					)
+				)
+			)
+			.setDescription(
+				ValueManager.validateNull(
+					displayType.get_Translation(
+						I_AD_Reference.COLUMNNAME_Description
+					)
+				)
+			)
+			.setHelp(
+				ValueManager.validateNull(
+					displayType.get_Translation(
+						I_AD_Reference.COLUMNNAME_Help
+					)
+				)
+			)
+		;
+
+		return builder;
+	}
+
 
 	/**
 	 * Convert Reference to builder
@@ -320,7 +371,9 @@ public class DictionaryConvertUtil {
 			.setDefaultValue(
 				ValueManager.validateNull(defaultValue)
 			)
-			.setDisplayType(displayTypeId)
+			.setDisplayType(
+				convertDisplayType(displayTypeId)
+			)
 			.setFormatPattern(
 				ValueManager.validateNull(column.getFormatPattern())
 			)
@@ -383,7 +436,9 @@ public class DictionaryConvertUtil {
 				Reference.Builder referenceBuilder = DictionaryConvertUtil.convertReference(context, info);
 				builder.setReference(referenceBuilder.build());
 			} else {
-				builder.setDisplayType(DisplayType.String);
+				builder.setDisplayType(
+					convertDisplayType(DisplayType.String)
+				);
 			}
 		}
 
@@ -503,7 +558,9 @@ public class DictionaryConvertUtil {
 			.setElementName(
 				ValueManager.validateNull(element.getColumnName())
 			)
-			.setDisplayType(displayTypeId)
+			.setDisplayType(
+				convertDisplayType(displayTypeId)
+			)
 			.setFieldLength(element.getFieldLength())
 			.setIsActive(element.isActive())
 		;
@@ -525,7 +582,9 @@ public class DictionaryConvertUtil {
 				);
 				builder.setReference(referenceBuilder.build());
 			} else {
-				builder.setDisplayType(DisplayType.String);
+				builder.setDisplayType(
+					convertDisplayType(DisplayType.String)
+				);
 			}
 		}
 		return builder;
