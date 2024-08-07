@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # global jvm config
-      JAVA_OPTS: "-Xmx2048m -XX:MaxMetaspaceSize=1024m"
+      JAVA_OPTS: "-Xmx2048m -XX:MaxMetaspaceSize=1024m -XX:+HeapDumpOnOutOfMemoryError"
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
