@@ -365,9 +365,9 @@ public class ReferenceUtil {
 				String displaySQL = getTableReferenceDisplaySQL(referenceValueId);
 				if (!Util.isEmpty(displaySQL, true)) {
 					String baseColumn = columnName.trim().startsWith("(") ? columnName : tableName + "." + columnName;
-					// Wrapped as MLookupFactory.getLookup_Table does: some Display SQL rely on it
-					// (e.g. "C_Order.DocumentNo,'-1') ||'_'|| NVL(...)")
-					displayColumn = "(SELECT NVL(" + displaySQL + ",'-1')"
+					// Wrapped as MLookupFactory.getLookup_Table does (NVL), with SQL-99 COALESCE: some Display SQL
+					// rely on it (e.g. "C_Order.DocumentNo,'-1') ||'_'|| NVL(...)")
+					displayColumn = "(SELECT COALESCE(" + displaySQL + ",'-1')"
 						+ " FROM " + lookupInfo.TableName
 						+ " WHERE " + lookupInfo.KeyColumn + " = " + baseColumn + ")";
 					referenceInfo.setDisplayColumnValue(displayColumn);
